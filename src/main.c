@@ -67,9 +67,18 @@ main(int argc, char* argv[])
   HAL_GPIO_Init(GPIOA, &GPIO_InitStructure);
 
   // Setup UART
+  //HAL_UART_MspInit(UartHandle);
+  // Enable USART6 and GPIOC clocks
+  RCC->APB2ENR |= RCC_APB2ENR_USART6EN;
+  RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
 
-  // Enable GPIOA Peripheral clock
-  RCC->AHB2ENR |= RCC_APB2ENR_USART6EN;
+  // Configure pin in output push/pull mode
+  GPIO_InitStructure.Pin = GPIO_PIN_6;
+  GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStructure.Speed = GPIO_SPEED_FAST;
+  GPIO_InitStructure.Pull = GPIO_NOPULL;
+  GPIO_InitStructure.Alternate = GPIO_AF8_USART6;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
 
   UartHandle.Instance          = USART6;
 
@@ -78,7 +87,7 @@ main(int argc, char* argv[])
   UartHandle.Init.StopBits     = UART_STOPBITS_1;
   UartHandle.Init.Parity       = UART_PARITY_ODD;
   UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-  UartHandle.Init.Mode         = UART_MODE_TX_RX;
+  UartHandle.Init.Mode         = UART_MODE_TX;
   UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
 
   if(HAL_UART_Init(&UartHandle) != HAL_OK)
