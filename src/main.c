@@ -76,7 +76,7 @@ main(int argc, char* argv[])
   GPIO_InitStructure.Pin = GPIO_PIN_6;
   GPIO_InitStructure.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStructure.Speed = GPIO_SPEED_FAST;
-  GPIO_InitStructure.Pull = GPIO_NOPULL;
+  GPIO_InitStructure.Pull = GPIO_PULLUP;
   GPIO_InitStructure.Alternate = GPIO_AF8_USART6;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStructure);
 
@@ -85,7 +85,7 @@ main(int argc, char* argv[])
   UartHandle.Init.BaudRate     = 9600;
   UartHandle.Init.WordLength   = UART_WORDLENGTH_8B;
   UartHandle.Init.StopBits     = UART_STOPBITS_1;
-  UartHandle.Init.Parity       = UART_PARITY_ODD;
+  UartHandle.Init.Parity       = UART_PARITY_NONE;
   UartHandle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
   UartHandle.Init.Mode         = UART_MODE_TX;
   UartHandle.Init.OverSampling = UART_OVERSAMPLING_16;
@@ -105,15 +105,20 @@ main(int argc, char* argv[])
 
   char ch = 'a';
   //while(HAL_UART_GetState(&UartHandle) == HAL_UART_STATE_RESET);
-  HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
+  //HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
 
   // Turn LED ON
   //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+  //HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 
   // Infinite loop
   while (1) {
-       // Add your code here.
+    // Add your code here.
+    HAL_UART_Transmit(&UartHandle, (uint8_t *)&ch, 1, 0xFFFF);
+    ch++;
+
+    HAL_Delay(2);
+
   }
 }
 
